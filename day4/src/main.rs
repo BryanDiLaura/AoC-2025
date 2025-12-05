@@ -10,8 +10,8 @@ pub fn file_handle(path: &str) -> io::Result<BufReader<File>> {
     Ok(BufReader::new(file))
 }
 
-pub fn count_accessible(grid: &Vec<Vec<i32>>) -> u32 {
-    let mut count = 0;
+pub fn count_accessible(grid: &Vec<Vec<i32>>) -> Vec<(usize, usize)> {
+    let mut result = Vec::new();
 
     for (row, r) in grid.iter().enumerate() {
         for (col, v) in r.iter().enumerate() {
@@ -40,19 +40,15 @@ pub fn count_accessible(grid: &Vec<Vec<i32>>) -> u32 {
                     }
                 }
                 if index_count < 4 {
-                    count += 1;
+                    result.push((row as usize, col as usize));
                 }
             }
         }
     }
 
-    for a in grid {
-        println!("{:?}", a);
-    }
+    println!("COUNT: {}", result.len());
 
-    println!("COUNT: {count}");
-
-    count
+    result
 }
 
 fn main() -> io::Result<()> {
@@ -70,14 +66,22 @@ fn main() -> io::Result<()> {
         })
         .collect();
 
-    count_accessible(&mut grid);
     //pt1
-    // let total: u32 = banks.iter().map(|b| calculate_max_power_2(&b)).sum();
+    // count_accessible(&mut grid);
 
     //pt2
-    // let total: u64 = banks.iter().map(|b| calculate_max_power(&b, 12)).sum();
+    let mut total = 0;
+    while let count = count_accessible(&grid) {
+        if count.len() <= 0 {
+            break;
+        }
+        total += count.len();
+        for (x, y) in count {
+            grid[x][y] = -1;
+        }
+    }
 
-    // println!("ANSWER: {total}");
+    println!("ANSWER: {total}");
 
     Ok(())
 }
