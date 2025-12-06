@@ -48,6 +48,9 @@ enum Operation {
     Multiply,
 }
 
+//I realized after the fact that I did this in a dumb way. I really should just reverse iterate
+//making numbers along the way, and use anchors to do the operation and clear the numbers
+//vector. Ah well.
 pub fn calculate_annoying(problems: &Vec<String>) -> u64 {
     let operation_row_idx = problems.len() - 1;
     let op_row = &problems[operation_row_idx];
